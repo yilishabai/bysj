@@ -28,7 +28,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    console.log('你打开了用户设置')
+    console.log('传入的参数为：')
+    console.log(options.selected)
+    this.setData({
+      dictionarys: options.selected.length
+    })
   },
 
   /**

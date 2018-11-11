@@ -8,29 +8,39 @@ Page({
    */
   data: {
     dictionaries: [
-      { name: '大学英语四级词汇1', size: '5000' },
-      { name: '大学英语四级词汇2', size: '5000' },
-      { name: '大学英语四级词汇3', size: '5000' },
-      { name: '大学英语四级词汇4', size: '5000' },
-      { name: '大学英语四级词汇5', size: '5000' },
-      { name: '大学英语四级词汇6', size: '5000' },
-      { name: '大学英语四级词汇7', size: '5000' },
-      { name: '大学英语四级词汇8', size: '5000' },
-      { name: '大学英语四级词汇9', size: '5000' },
-      { name: '大学英语四级词汇10', size: '5000' },
-      { name: '大学英语四级词汇11', size: '5000' },
-      { name: '大学英语四级词汇12', size: '5000' },
-      { name: '大学英语四级词汇13', size: '5000' },
-      { name: '大学英语四级词汇14', size: '5000' },
-      { name: '大学英语四级词汇15', size: '5000' },
+      { name: '大学英语四级词汇1', size: 5000 ,checked:false},
+      { name: '大学英语四级词汇2', size: 5000 },
+      { name: '大学英语四级词汇3', size: 5000 },
+      { name: '大学英语四级词汇4', size: 5000 },
+      { name: '大学英语四级词汇5', size: 5000 },
+      { name: '大学英语四级词汇6', size: 5000 },
+      { name: '大学英语四级词汇7', size: 5000 },
+      { name: '大学英语四级词汇8', size: 5000 },
+      { name: '大学英语四级词汇9', size: 5000 },
+      { name: '大学英语四级词汇10', size: 5000 },
+      { name: '大学英语四级词汇11', size: 5000 },
+      { name: '大学英语四级词汇12', size: 5000 },
+      { name: '大学英语四级词汇13', size: 5000 },
+      { name: '大学英语四级词汇14', size: 5000 },
+      { name: '大学英语四级词汇15', size: 5000 },
     ],
     selected: []
   },
   checkboxChange: function(e){
-    this.setData({
-      selected:e.detail.value
-    })
-    console.log('你选择了:'+e.detail.value)
+    //获取已选择对象
+    var arr = [];
+    e.detail.value.forEach(current => {
+      for (var value of this.data.dictionaries) {
+        if (current === value.name) {
+          arr.push(value);
+          break;
+        }
+      }
+    });
+    //放入data
+    this.setData({ selected: arr });
+    console.log('你选择了：')
+    console.log(this.data.selected)
   },
   changetoIndex: function(e){
     var length=this.data.selected.length
@@ -40,9 +50,10 @@ Page({
     })
   },
   changetoSetting: function (e) {
+    var selected = this.data.selected.length
     console.log('你点击了用户设置')
     wx.redirectTo({
-      url: "../setting/setting"
+      url: "../setting/setting?selected=" + selected
     })
   },
   /**
@@ -50,6 +61,7 @@ Page({
    */
   onLoad: function (options) {
     console.log('你打开了词库选择')
+    //需要请求已选词库
   },
 
   /**

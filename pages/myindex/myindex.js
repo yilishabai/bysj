@@ -1,3 +1,6 @@
+//index.js
+//获取应用实例
+const app = getApp()
 // pages/myindex/myindex.js
 Page({
 
@@ -5,9 +8,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    user: {
-      name:"123"
-    },
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    user: {},
     word:{
       name:"hello",
       IPA:"英 [hə'ləʊ] 美 [həˈloʊ]",
@@ -22,9 +25,6 @@ Page({
     msgtxt:"点击添加新的单词到你的词汇表"
   },
   handleTap: function(event){
-    // this.setData({
-    //   msgtxt:"你点击了！"
-    // })
     console.log('你点击了message的块')
     if(!this.data.haslexicon){
       wx.redirectTo({
@@ -62,7 +62,11 @@ Page({
       })
     }
   },
-
+  getUserInfo: function (e) {
+    wx.getShareInfo({
+      
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

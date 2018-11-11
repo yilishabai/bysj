@@ -1,6 +1,6 @@
 <!--pages/myindex/myindex.wxml-->
 <view wx:if="{{!haslexicon}}" class='container'>
-  <view class='userwelcome'>欢迎{{user.name}}！</view>
+  <view class='userwelcome'>欢迎<open-data type="userNickName"></open-data>！</view>
   <view class='message'bindtap='handleTap'>{{msgtxt}}</view>
   <view class='footer'>
     <view class='footer-left'>剩余单词数
