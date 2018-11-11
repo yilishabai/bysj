@@ -29,11 +29,13 @@ Page({
    */
   onLoad: function (options) {
     console.log('你打开了用户设置')
-    console.log('传入的参数为：')
-    console.log(options.selected)
-    this.setData({
-      dictionarys: options.selected.length
-    })
+    if(options.selected){
+      console.log('传入的参数为：')
+      console.log(options.selected)
+      this.setData({
+        dictionarys: options.selected.length
+      })
+    }
   },
 
   /**
