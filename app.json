@@ -1,0 +1,13 @@
+{
+  "pages":[
+    "pages/myindex/myindex",
+    "pages/select/select",
+    "pages/setting/setting"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle":"black"
+  }
+}

@@ -1,0 +1,35 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+page{
+  height: 100%;
+}
+.clear{
+  clear: both;
+}
+.footer{
+  margin: 0;
+  padding: 0;
+  height: 10%;
+  width: 100%;
+}
+.footer-left,.footer-right{
+  height: 100%;
+  float: left;
+  width: 50%;
+  text-align: center;
+  /* 垂直水平居中 */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  /* 边框  */
+  box-sizing: border-box;
+  border: 1px solid yellow;
+}

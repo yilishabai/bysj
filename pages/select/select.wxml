@@ -1,0 +1,19 @@
+<!--pages/select/select.wxml-->
+<view class='body'>
+  <view class='header'>词库</view>
+  <scroll-view scroll-y class='selectbody'>
+    <form>
+      <checkbox-group bindchange="checkboxChange">
+        <label class="checkbox" wx:for="{{dictionaries}}" wx:key="{{index}}">
+          <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.name}}({{item.size}})
+        </label>
+      </checkbox-group>
+    </form>
+  </scroll-view>
+  <view class='footer'>
+    <view class='footer-left' bindtap='changetoIndex'>复习
+    </view>
+    <view class='footer-right' bindtap='changetoSetting'>用户设置
+    </view>
+  </view>
+</view>

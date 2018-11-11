@@ -1,0 +1,37 @@
+<!--pages/myindex/myindex.wxml-->
+<view wx:if="{{!haslexicon}}" class='container'>
+  <view class='userwelcome'>欢迎{{user.name}}！</view>
+  <view class='message'bindtap='handleTap'>{{msgtxt}}</view>
+  <view class='footer'>
+    <view class='footer-left'>剩余单词数
+    </view>
+    <view class='footer-right' bindtap='changetoSetting'>用户设置
+    </view>
+  </view>
+</view>
+<view wx:else class='container'>
+  <view class='wordsInfo'><text>{{word.name+'\n'+word.IPA}}</text></view>
+  <view class='middle'>
+    <view wx:if="{{!clicked}}" class='message'bindtap='handleTap'>
+      <text>{{msg}}</text>
+    </view>
+    <view wx:else class='wordmeans'>
+      <view class='means'>
+        <text>{{word.means}}</text>
+      </view>
+      <view class='example'>
+        <text>{{word.uses}}</text>
+      </view>
+      <view class='buttons'>
+        <button bindtap='btnHandle' data-know='{{true}}'>认识</button>
+        <button bindtap='btnHandle' data-know='{{false}}'>不认识</button>
+      </view>
+    </view>
+  </view>
+  <view class='footer'>
+    <view class='footer-left'>剩余单词数{{lastnum}}
+    </view>
+    <view class='footer-right' bindtap='changetoSetting'>用户设置
+    </view>
+  </view>
+</view>

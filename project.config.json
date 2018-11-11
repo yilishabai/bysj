@@ -1,0 +1,58 @@
+{
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.2.0",
+	"appid": "touristappid",
+	"projectname": "localTest",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": 0,
+					"name": "myindex",
+					"pathName": "pages/myindex/myindex",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "选词页面",
+					"pathName": "pages/select/select",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "用户设置",
+					"pathName": "pages/setting/setting",
+					"query": ""
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,31 @@
+<!--pages/setting/setting.wxml-->
+<view class='body'>
+  <view class='header'>用户名+头像</view>
+  <view class='middle'>
+    <text class='title'>学习设置：</text>
+    <view class='setters'>
+      <text>每日学习量</text>
+      <view class="section">
+        <input maxlength="5" type="number" bindinput='inputHandle' placeholder="{{dayNum}}" />
+      </view>
+      <view class='clear'></view>
+      <text>已选词库</text>
+      <view class='dic' bindtap='changetoSelect'>{{dictionarys}}</view>
+    </view>
+    <view class='clear'></view>
+    <text class='title'>学习情况：</text>
+    <view class='setters'>
+      <text>已学单词量</text>
+       <view class='dic'>{{learnedNum}}</view>
+      <view class='clear'></view>
+      <text>剩余单词量</text>
+      <view class='dic'>{{5000-learnedNum}}</view>
+    </view>
+  </view>
+  <view class='footer'>
+    <view class='footer-left' bindtap='changetoIndex'>复习
+    </view>
+    <view class='footer-right'>用户设置
+    </view>
+  </view>
+</view>
