@@ -16,9 +16,6 @@
   display:flex;
   justify-content:center;
   align-items:center;
-      /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid red;
 }
 .body .middle{
   height: 70%;
@@ -26,7 +23,7 @@
   padding: 20px 0;
       /* 边框  */
   box-sizing: border-box;
-  border: 1px solid blue;
+  border: 1px solid white;
 }
 .middle .setters{
   margin: 10px 0;

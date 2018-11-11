@@ -33,7 +33,7 @@ Page({
       console.log('传入的参数为：')
       console.log(options.selected)
       this.setData({
-        dictionarys: options.selected.length
+        dictionarys: options.selected
       })
     }
   },

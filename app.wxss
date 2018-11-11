@@ -31,5 +31,19 @@ page{
   align-items:center;
   /* 边框  */
   box-sizing: border-box;
-  border: 1px solid yellow;
+  border: 1px solid white;
+}
+.calm-1{
+  color: white;
+  background-color: rgb(0, 123, 187)
+}
+.calm-2{
+  color: rgb(42, 42, 65);
+  background-color: rgb(102, 160, 189)
+}
+.calm-3{
+  background-color: rgb(226, 235, 179)
+}
+.calm-3-1{
+  background-color: rgb(255, 243, 176)
 }

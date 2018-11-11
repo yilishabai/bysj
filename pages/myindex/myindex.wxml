@@ -1,9 +1,9 @@
 <!--pages/myindex/myindex.wxml-->
 <view wx:if="{{!haslexicon}}" class='container'>
   <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
-  <view class='userwelcome'>欢迎{{user.nickName}}！</view>
-  <view class='message'bindtap='handleTap'>{{msgtxt}}</view>
-  <view class='footer'>
+  <view class='userwelcome calm-1'>欢迎{{user.nickName}}！</view>
+  <view class='message calm-3' bindtap='handleTap'>{{msgtxt}}</view>
+  <view class='footer calm-2'>
     <view class='footer-left'>剩余单词数
     </view>
     <view class='footer-right' bindtap='changetoSetting'>用户设置
@@ -11,13 +11,13 @@
   </view>
 </view>
 <view wx:else class='container'>
-  <view class='wordsInfo'><text>{{word.name+'\n'+word.IPA}}</text></view>
-  <view class='middle'>
+  <view class='wordsInfo calm-1'><text>{{word.name+'\n'+word.IPA}}</text></view>
+  <view class='middle calm-3'>
     <view wx:if="{{!clicked}}" class='message'bindtap='handleTap'>
       <text>{{msg}}</text>
     </view>
     <view wx:else class='wordmeans'>
-      <view class='means'>
+      <view class='means calm-3-1'>
         <text>{{word.means}}</text>
       </view>
       <view class='example'>
@@ -29,7 +29,7 @@
       </view>
     </view>
   </view>
-  <view class='footer'>
+  <view class='footer calm-2'>
     <view class='footer-left'>剩余单词数{{lastnum}}
     </view>
     <view class='footer-right' bindtap='changetoSetting'>用户设置

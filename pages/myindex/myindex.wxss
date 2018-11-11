@@ -5,31 +5,22 @@
   height: 100%;
   width: 100%;
   overflow: hidden; 
-  /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid red;
 }
 .userwelcome,.wordsInfo{
   height: 15%;
-  width: 50%;
+  width: 100%;
   /* margin: 1em auto; */
   text-align: center;
   /* 垂直水平居中 */
   display:flex;
   justify-content:center;
   align-items:center;
-  /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid green;
 }
 .middle{
   height: 75%;
   width: 100%;
   /* line-height: 22em; */
   text-align: center;
-  /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid blue;
 }
 .message{
   height: 100%;
@@ -41,17 +32,11 @@
 }
 .wordmeans{
   height: 100%;
-   /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid blue;
 }
 /* 意思  */
 .wordmeans .means{
   height: 41%;
   width: 100%;
-  /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid orange;
     /* 组件垂直水平居中 */
   display:flex;
   justify-content:center;
@@ -61,9 +46,6 @@
 .wordmeans .example{
   height: 41%;
   width: 100%;
-  /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid orange;  
     /* 组件垂直水平居中 */
   display:flex;
   justify-content:center;
