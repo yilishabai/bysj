@@ -1,8 +1,11 @@
 <!--pages/myindex/myindex.wxml-->
 <view wx:if="{{!haslexicon}}" class='container'>
-  <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
+
   <view class='userwelcome calm-1'>欢迎{{user.nickName}}！</view>
-  <view class='message calm-3' bindtap='handleTap'>{{msgtxt}}</view>
+  <view wx:if="{{!hasUserInfo && canIUse}}" class='message calm-3'>
+    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
+  </view>
+  <view wx:else class='message calm-3' bindtap='handleTap'>{{msgtxt}}</view>
   <view class='footer calm-2'>
     <view class='footer-left'>剩余单词数
     </view>
