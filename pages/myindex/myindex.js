@@ -98,56 +98,108 @@ Page({
   onLoad: function (options) {
     console.log('你打开了小程序首页')
     //打开小程序
-    if (options.selected > 0) {//如果有选择词库      
-      console.log('获得的参数：' + options.selected)
-      this.setData({
-        word: this.data.words.shift(),
-        haslexicon: true
-      })
-    }
-
     if (!this.data.haslexicon) {//如果未获取登录信息   
-      var content = this;
-      if (app.globalData.userInfo) {
-        this.setData({
-          user: app.globalData.userInfo,
-          hasUserInfo: true
-        })
-      } else if (this.data.canIUse) {
-        // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-        // 所以此处加入 callback 以防止这种情况
-        app.userInfoReadyCallback = res => {
-          this.setData({
-            user: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      } else {
-        // 在没有 open-type=getUserInfo 版本的兼容处理
-        wx.getUserInfo({
-          success: res => {
-            app.globalData.userInfo = res.userInfo
-            this.setData({
-              user: res.userInfo,
-              hasUserInfo: true
-            })
-          }
-        })
-      }
-      console.log(this.data.user)
+      this.getUserLoginInfo();//获取用户信息
+      if(this.data.hasUserInfo)
+        this.getUserOpenid();//获取openid并上传服务器
     } else {//如果获取登录信息
+      this.getUserOpenid();//获取openid并上传服务器
       this.setData({//初始化信息
         lastnum: this.data.words.length+1
       })
     }
+    if (options.selected > 0) {//如果有选择词库      
+      console.log('获得的参数：' + options.selected)
+      this.setData({
+        word: this.data.words.shift(),//读取获取到的单词
+        haslexicon: true
+      })
+    }
+
   },
   getUserInfo: function (e) {
-    //获取登录信息
-    console.log(e)
+    //按钮获取登录信息
+    console.log("button get userInfo ok!")
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       user: e.detail.userInfo,
       hasUserInfo: true
+    })
+    this.getUserOpenid()
+  },
+  getUserOpenid: function() {
+    var content = this;
+    wx.login({
+      //获取code
+      success: function (res) {
+        var code = res.code; //返回code
+        // console.log(code);
+        var appId = 'wxee05247bc3763d94';
+        var secret = 'edc926f5bf46b7dec470ed3d787061c0';
+        wx.request({
+          url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appId + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code',
+          data: {},
+          header: {
+            'content-type': 'json'
+          },
+          success: function (res) {
+            var openid = res.data.openid //返回openid
+            app.globalData.userInfo.openid = openid
+            console.log('get openid ok!openid为' + openid);
+            // console.log(content.data.user)
+            content.mindexInit();
+          }
+        })
+      }
+    })
+  },
+  getUserLoginInfo: function() {
+    if (app.globalData.userInfo) {
+      this.setData({
+        user: app.globalData.userInfo,
+        hasUserInfo: true
+      })
+    } else if (this.data.canIUse) {
+      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+      // 所以此处加入 callback 以防止这种情况
+      app.userInfoReadyCallback = res => {
+        this.setData({
+          user: res.userInfo,
+          hasUserInfo: true
+        })
+      }
+    } else {
+      // 在没有 open-type=getUserInfo 版本的兼容处理
+      wx.getUserInfo({
+        withCredentials: true,
+        success: res => {
+          app.globalData.userInfo = res.userInfo
+          this.setData({
+            user: res.userInfo,
+            hasUserInfo: true
+          })
+          console.log("use wx.getuserinfo ok!")
+        }
+      })
+    }
+    if(this.data.hasUserInfo){
+      console.log("get login info ok!")
+      console.log(this.data.user)
+    }
+
+  },
+  mindexInit: function(){
+    //获取的userinfo上传到服务器
+    wx.request({
+      url: 'http://localhost:8080/user', //仅为示例，并非真实的接口地址
+      data: app.globalData.userInfo,
+      // header:{
+      //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
+      // },
+      method: 'POST',
+      success(res) {
+        console.log(res.data)
+      }
     })
   },
   /**
