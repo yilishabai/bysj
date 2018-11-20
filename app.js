@@ -34,6 +34,9 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: {
+      dayNum:50
+    },
+    // hasUserInfo: false,
   }
 })

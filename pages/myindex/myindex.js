@@ -11,24 +11,26 @@ Page({
     // 用户信息
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    user: {},
+    user: {
+      dayNum:50
+    },
     //单词信息（伪）
     words:[
       {
         name:"hello",
-        IPA:"英 [hə'ləʊ] 美 [həˈloʊ]",
-        means: "int.打招呼;哈喽，喂;你好，您好;表示问候\n\
+        ipa:"英 [hə'ləʊ] 美 [həˈloʊ]",
+        meaning: "int.打招呼;哈喽，喂;你好，您好;表示问候\n\
         n.“喂”的招呼声或问候声\nvi.喊“喂”",
         uses: "Hello John, how are you?\n哈罗，约翰，你好吗？",
       },{
         name: "bye",
-        IPA: "英 [baɪ] 美 [baɪ]",
-        means: "int.再见，回头见\nn.次要的东西; （体育比赛中）轮空",
+        ipa: "英 [baɪ] 美 [baɪ]",
+        meaning: "int.再见，回头见\nn.次要的东西; （体育比赛中）轮空",
         uses: "Bye, see you tomorrow\n再见，明天见。",
       }, {
         name: "copy",
-        IPA: "英 [ˈkɒpi] 美 [ˈkɑ:pi] ",
-        means: "n.复制品; 一份; （报刊等的）稿件; 准备排印的书面材料\
+        ipa: "英 [ˈkɒpi] 美 [ˈkɑ:pi] ",
+        meaning: "n.复制品; 一份; （报刊等的）稿件; 准备排印的书面材料\
         \nvt.& vi.复制; 抄写; 容许复制的\nvt.复制; 模仿; 仿造…的样式或图案; 抄写",
         uses: "I will send you a copy of the report.\n我会把这个报告的复印本寄给你。",
       }
@@ -110,8 +112,12 @@ Page({
     }
     if (options.selected > 0) {//如果有选择词库      
       console.log('获得的参数：' + options.selected)
+
+      this.getWords(10);//获取单词
+
       this.setData({
         word: this.data.words.shift(),//读取获取到的单词
+        lastNum: 10,
         haslexicon: true
       })
     }
@@ -199,6 +205,23 @@ Page({
       method: 'POST',
       success(res) {
         console.log(res.data)
+      }
+    })
+  },
+  getWords: function(dayNum){
+    var that = this
+    wx.request({
+      url: "http://localhost:8080/user/getDayNum?dayNum=" + dayNum, //仅为示例，并非真实的接口地址
+      data: app.globalData.userInfo,
+      // header:{
+      //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
+      // },
+      method: 'GET',
+      success(res) {
+        console.log(res.data);
+        that.setData({
+          words:res.data
+        })
       }
     })
   },
