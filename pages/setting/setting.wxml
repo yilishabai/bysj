@@ -12,8 +12,10 @@
         <input maxlength="5" type="number" bindinput='inputHandle' placeholder="{{dayNum}}" />
       </view>
       <view class='clear'></view>
-      <text>已选词库</text>
-      <view class='dic' bindtap='changetoSelect'>{{dictionarys}}</view>
+      <view  bindtap='changetoSelect'>
+        <text>已选词库(点击选择词库)</text>
+        <view class='dic'>{{dictionarys}}</view>
+      </view>
     </view>
     <view class='clear'></view>
     <text class='title calm-3-1'>学习情况：</text>

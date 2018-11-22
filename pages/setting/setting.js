@@ -1,16 +1,22 @@
 // pages/setting/setting.js
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    dayNum:50,
+    dayNum: 0,
     dictionarys:2,
-    learnedNum:215
+    learnedNum:215,
+    changeDayNum:false,
   },
   inputHandle: function(e){
     console.log('你修改了每日词汇量')
+    app.globalData.userInfo.dayNum = e.detail.value;
+    this.setData({
+      changeDaynum:true
+    })
   },
   changetoSelect: function(e){
     console.log('你点击了选择词库')
@@ -29,11 +35,15 @@ Page({
    */
   onLoad: function (options) {
     console.log('你打开了用户设置')
+    console.log(app.globalData)
+    this.setData({
+      dayNum: app.globalData.userInfo.dayNum
+    })
     if(options.selected){
       console.log('传入的参数为：')
       console.log(options.selected)
       this.setData({
-        dictionarys: options.selected
+        dictionarys: options.selected,
       })
     }
   },
@@ -63,7 +73,16 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    if(this.data.changeDaynum){
+      wx.request({
+        url: 'http://localhost:8080/user', //仅为示例，并非真实的接口地址
+        data: app.globalData.userInfo,
+        method: 'PUT',
+        success(res) {
+          console.log(res.data)
+        }
+      })
+    }
   },
 
   /**

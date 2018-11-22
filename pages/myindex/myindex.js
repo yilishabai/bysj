@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
 const app = getApp()
+var data = require("../data/data.js");
 // pages/myindex/myindex.js
 Page({
 
@@ -11,31 +12,9 @@ Page({
     // 用户信息
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    user: {
-      dayNum:50
-    },
+    user: null,
     //单词信息（伪）
-    words:[
-      {
-        name:"hello",
-        ipa:"英 [hə'ləʊ] 美 [həˈloʊ]",
-        meaning: "int.打招呼;哈喽，喂;你好，您好;表示问候\n\
-        n.“喂”的招呼声或问候声\nvi.喊“喂”",
-        uses: "Hello John, how are you?\n哈罗，约翰，你好吗？",
-      },{
-        name: "bye",
-        ipa: "英 [baɪ] 美 [baɪ]",
-        meaning: "int.再见，回头见\nn.次要的东西; （体育比赛中）轮空",
-        uses: "Bye, see you tomorrow\n再见，明天见。",
-      }, {
-        name: "copy",
-        ipa: "英 [ˈkɒpi] 美 [ˈkɑ:pi] ",
-        meaning: "n.复制品; 一份; （报刊等的）稿件; 准备排印的书面材料\
-        \nvt.& vi.复制; 抄写; 容许复制的\nvt.复制; 模仿; 仿造…的样式或图案; 抄写",
-        uses: "I will send you a copy of the report.\n我会把这个报告的复印本寄给你。",
-      }
-    ],
-    word:{},
+    word:null,
     //是否选择词库
     haslexicon:false,
     //是否点击显示答案
@@ -54,35 +33,50 @@ Page({
       wx.redirectTo({
         url: "../select/select"
       })
-    } else if (!this.data.clicked){
+    } else if (!this.data.clicked && this.data.lastnum>0){
       // 已选择词库点击->显示单词信息
       this.setData({
         clicked: true
       })
+    } else {
+      console.log(data.learned);
     }
   },
+  //跳转到设置
   changetoSetting: function(e){
-    //跳转到设置页面
-    console.log('你点击了用户设置')
-    wx.redirectTo({
-      url: "../setting/setting"
-    })  
+    if (this.data.hasUserInfo || !this.data.canIUse){//如果已登录
+      //跳转到设置页面
+      console.log('你点击了用户设置')
+      wx.redirectTo({
+        url: "../setting/setting"
+      }) 
+    } else {//未登录
+      wx.showToast({
+        title: '请先登录！',
+        icon: 'none',
+        duration: 1000,
+        mask: true
+      }) 
+    }
+ 
   },
+  //处理认识/不认识按钮
   btnHandle: function(e){
     //认识/不认识按钮处理
     if (e.currentTarget.dataset.know){
       console.log('你点了认识')
+      data.learned.push(this.data.word.id)
     } else {
       console.log('你点了不认识')
-      this.data.words.push(this.data.word);
+      data.words.push(this.data.word);
     }
-    var myshiftword = this.data.words.shift();
-    console.log(this.data.words);
+    var myshiftword = data.words.shift();
+    console.log(data.words);
     if (typeof (myshiftword) != "undefined"){//如果没有背完所有单词
       this.setData({
         word: myshiftword,//把取出来的单词存入word
         clicked: false,//遮盖答案
-        lastnum: this.data.words.length+1//修改剩余单词值
+        lastnum: data.words.length+1//修改剩余单词值
       })
     } else {//背完所有单词
       this.setData({
@@ -91,39 +85,76 @@ Page({
         lastnum: 0,//清空剩余单词值
         msg: "恭喜你，已经背完今天的所有单词！"//提示
       })
+      this.sendLearnedWords();
     }
     // console.log(e)
+  },
+  //发送已背单词到数据库
+  sendLearnedWords: function(){
+    wx.request({
+      url: 'http://localhost:8080/words/learned', //仅为示例，并非真实的接口地址
+      data: {
+        learnedId:data.learned,
+        userid: app.globalData.userInfo.openid
+      },
+      // header:{
+      //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
+      // },
+      method: 'POST',
+      success(res) {
+        console.log(res.data)
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this
     console.log('你打开了小程序首页')
     //打开小程序
-    if (!this.data.haslexicon) {//如果未获取登录信息   
-      this.getUserLoginInfo();//获取用户信息
-      if(this.data.hasUserInfo)
-        this.getUserOpenid();//获取openid并上传服务器
-    } else {//如果获取登录信息
-      this.getUserOpenid();//获取openid并上传服务器
-      this.setData({//初始化信息
-        lastnum: this.data.words.length+1
+    //第一次登陆显示授权按钮
+    if(!this.data.hasUserInfo && !app.globalData.hasUserInfo)//未登录
+    {
+      console.log('新打开')
+      //获取用户所有信息
+      that.getUserAllInfo().then(res => {
+        that.sendUserinfo();//发送
       })
-    }
-    if (options.selected > 0) {//如果有选择词库      
-      console.log('获得的参数：' + options.selected)
 
-      this.getWords(10);//获取单词
-
+      app.globalData.hasUserInfo = true;
+    } else {//小程序内切换页面不重新获取发送
+      console.log('页面内跳转')     
       this.setData({
-        word: this.data.words.shift(),//读取获取到的单词
-        lastNum: 10,
-        haslexicon: true
-      })
+        user: app.globalData.userInfo,
+        hasUserInfo: true
+      })//添加用户基本信息到本页面
     }
-
+    if (options.selected > 0 && data.words.length <= 0) {//如果有选择词库且未获取      
+      console.log('获得的参数：' + options.selected)
+      var promise = dayNum => {
+          return new Promise((resovle,reject) => {
+            that.getWords(dayNum,resovle)//获取单词
+        })  
+      }    
+      promise(app.globalData.userDayNum).then(res =>{
+        that.setData({
+          word:data.words.shift(),
+          lastnum:data.words.length+1,
+          haslexicon: true//同步页面数据
+        })
+      })
+    } else if(data.words.length>0){//已获取词库在程序内跳转不重新请求
+      that.setData({
+        word: data.words.shift(),
+        lastnum: data.words.length + 1,
+        haslexicon: true//同步页面数据
+      })    
+    }
   },
+  //处理按钮获授权获取用户信息
   getUserInfo: function (e) {
+    var that = this
     //按钮获取登录信息
     console.log("button get userInfo ok!")
     app.globalData.userInfo = e.detail.userInfo
@@ -131,15 +162,26 @@ Page({
       user: e.detail.userInfo,
       hasUserInfo: true
     })
-    this.getUserOpenid()
+    this.getUserOpenid().then(res => {
+      that.sendUserinfo();//发送
+    })
   },
+  //获取用户openid
   getUserOpenid: function() {
     var content = this;
-    wx.login({
-      //获取code
-      success: function (res) {
-        var code = res.code; //返回code
-        // console.log(code);
+    var promise = () => {
+      return new Promise((resovle, reject) => {
+        wx.login({
+          //获取code
+          success: function (res) {
+            var code = res.code; //返回code
+            resovle(code);
+          }
+        })
+      })
+    }
+    var promise1 = (code) => {
+      return new Promise((resovle, reject) => {
         var appId = 'wxee05247bc3763d94';
         var secret = 'edc926f5bf46b7dec470ed3d787061c0';
         wx.request({
@@ -153,48 +195,72 @@ Page({
             app.globalData.userInfo.openid = openid
             console.log('get openid ok!openid为' + openid);
             // console.log(content.data.user)
-            content.mindexInit();
+            resovle();
           }
         })
-      }
-    })
-  },
-  getUserLoginInfo: function() {
-    if (app.globalData.userInfo) {
-      this.setData({
-        user: app.globalData.userInfo,
-        hasUserInfo: true
       })
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          user: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        withCredentials: true,
-        success: res => {
-          app.globalData.userInfo = res.userInfo
+    }
+    var p = promise().then(res => {
+      console.log(res);
+      return promise1(res);
+    })
+    return p
+  },
+  //获取用户登录基本信息
+  getUserLoginInfo: function() {
+      return new Promise((resolve,reject) => {
+        if (app.globalData.userInfo.nickName) {
           this.setData({
-            user: res.userInfo,
+            user: app.globalData.userInfo,
             hasUserInfo: true
           })
-          console.log("use wx.getuserinfo ok!")
+          console.log("app has userInfo!")
+          resolve();
+        } else if (this.data.canIUse) {
+          // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+          // 所以此处加入 callback 以防止这种情况
+          app.userInfoReadyCallback = res => {
+            this.setData({
+              user: res.userInfo,
+              hasUserInfo: true
+            })
+            resolve();
+          }
+          console.log("use userInfoReadyCallback get userInfo!")
+        } else {
+          // 在没有 open-type=getUserInfo 版本的兼容处理
+          wx.getUserInfo({
+            withCredentials: true,
+            success: res => {
+              app.globalData.userInfo = res.userInfo
+              this.setData({
+                user: res.userInfo,
+                hasUserInfo: true
+              })
+              console.log("use wx.getuserinfo ok!")
+              resolve();
+            }
+          })
+        }
+        if (this.data.hasUserInfo) {
+          console.log("get login info ok!")
+          console.log(this.data.user)
+          
         }
       })
-    }
-    if(this.data.hasUserInfo){
-      console.log("get login info ok!")
-      console.log(this.data.user)
-    }
 
   },
-  mindexInit: function(){
+  //获取用户所有信息
+  getUserAllInfo: function() {
+    var that = this;
+    var p = that.getUserLoginInfo().then(res => {
+      return that.getUserOpenid();
+    })
+    return p
+  },
+  //发送用户信息
+  sendUserinfo: function(){
+    console.log('send userInfo')
     //获取的userinfo上传到服务器
     wx.request({
       url: 'http://localhost:8080/user', //仅为示例，并非真实的接口地址
@@ -205,13 +271,17 @@ Page({
       method: 'POST',
       success(res) {
         console.log(res.data)
+        app.globalData.userInfo.id = res.data.id;
+        app.globalData.userInfo.dayNum = res.data.dayNum;
+        console.log(app.globalData);
       }
     })
   },
-  getWords: function(dayNum){
+  //获取单词
+  getWords: function(func){
     var that = this
     wx.request({
-      url: "http://localhost:8080/user/getDayNum?dayNum=" + dayNum, //仅为示例，并非真实的接口地址
+      url: "http://localhost:8080/words/getDayWords", //仅为示例，并非真实的接口地址
       data: app.globalData.userInfo,
       // header:{
       //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
@@ -219,9 +289,11 @@ Page({
       method: 'GET',
       success(res) {
         console.log(res.data);
-        that.setData({
-          words:res.data
-        })
+        data.words = res.data;
+        // that.setData({
+        //   words:res.data
+        // })
+        func();
       }
     })
   },
@@ -243,14 +315,16 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+    console.log("onHide")
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    if(this.data.haslexicon){
+      data.words.unshift(this.data.word);
+    }    
   },
 
   /**
