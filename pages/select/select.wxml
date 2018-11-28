@@ -2,9 +2,9 @@
 <view class='body'>
   <view class='header calm-1'>词库</view>
   <scroll-view scroll-y class='selectbody calm-3'>
-    <checkbox-group bindchange="checkboxChange">
-      <label class="checkbox" wx:for="{{dictionaries}}" wx:key="{{index}}">
-        <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.name}}({{item.size}})
+    <checkbox-group bindchange="checkboxChange" data-index="{{index}}" data-checks="{{item.selected}}" wx:for="{{dictionaries}}" wx:key="{{index}}">
+      <label class="checkbox">
+        <checkbox  data-index="{{index}}" value="{{item.name}}" checked="{{item.selected}}" disabled="{{item.selected}}"/>{{item.name}}({{item.size}})
       </label>
     </checkbox-group>
   </scroll-view>

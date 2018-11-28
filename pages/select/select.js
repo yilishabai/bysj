@@ -1,56 +1,56 @@
 // pages/select/select.js
 // 当页面跳转时把已选择的词库写入数据库
 // 然后跳一个提示框1秒提示数据已写入
+const app = getApp()
+var data = require("../data/data.js");
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    dictionaries: [
-      { name: '大学英语四级词汇1', size: 5000 ,checked:false},
-      { name: '大学英语四级词汇2', size: 5000 },
-      { name: '大学英语四级词汇3', size: 5000 },
-      { name: '大学英语四级词汇4', size: 5000 },
-      { name: '大学英语四级词汇5', size: 5000 },
-      { name: '大学英语四级词汇6', size: 5000 },
-      { name: '大学英语四级词汇7', size: 5000 },
-      { name: '大学英语四级词汇8', size: 5000 },
-      { name: '大学英语四级词汇9', size: 5000 },
-      { name: '大学英语四级词汇10', size: 5000 },
-      { name: '大学英语四级词汇11', size: 5000 },
-      { name: '大学英语四级词汇12', size: 5000 },
-      { name: '大学英语四级词汇13', size: 5000 },
-      { name: '大学英语四级词汇14', size: 5000 },
-      { name: '大学英语四级词汇15', size: 5000 },
-    ],
-    selected: []
+    dictionaries: [],
+    selected: {}
   },
   checkboxChange: function(e){
-    //获取已选择对象
-    var arr = [];
-    e.detail.value.forEach(current => {
-      for (var value of this.data.dictionaries) {
-        if (current === value.name) {
-          arr.push(value);
-          break;
-        }
-      }
-    });
-    //放入data
-    this.setData({ selected: arr });
-    console.log('你选择了：')
-    console.log(this.data.selected)
+    var id = e.target.dataset.index;
+    var selected = e.target.dataset.checks ? false : true;
+    console.log(id);
+    console.log(selected)
+    data.dictionaries[id].selected=selected;
+    if(selected){
+      this.setData({
+        dictionaries: data.dictionaries,
+        selected: data.dictionaries[id]
+      })
+    } else {
+      this.setData({
+        selected: {}
+      })    
+    }
+
   },
   changetoIndex: function(e){
-    var length=this.data.selected.length
+    var length = 0;
+    var value;
+    for (value of data.dictionaries) {
+      if (value.selected) {
+        length++
+      }
+    }
     console.log('你点击了复习')
     wx.redirectTo({
       url: '../myindex/myindex?selected=' + length
     })
   },
   changetoSetting: function (e) {
-    var selected = this.data.selected.length
+    var selected =0;
+    var value;
+    for(value of data.dictionaries){
+      if(value.selected){
+        selected++
+      }
+    }
     console.log('你点击了用户设置')
     wx.redirectTo({
       url: "../setting/setting?selected=" + selected
@@ -60,8 +60,30 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this
     console.log('你打开了词库选择')
-    //需要请求已选词库
+    if(data.dictionaries.length==0){
+      //需要请求已选词库
+      wx.request({
+        url: 'http://localhost:8080/words/getBooks',
+        data: app.globalData.userInfo,
+        // header:{
+        //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
+        // },
+        method: 'GET',
+        success(res) {
+          console.log(res.data)
+          data.dictionaries = res.data;
+          that.setData({
+            dictionaries: res.data
+          })
+        }
+      })
+    } else {
+      this.setData({
+        dictionaries: data.dictionaries
+      })   
+    }
   },
 
   /**
@@ -94,6 +116,23 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    var that = this
+    if(this.data.selected.id){//如果选择
+      wx.request({
+        url: 'http://localhost:8080/words/selectedBooks',
+        data: {
+          user: app.globalData.userInfo,
+          book: that.data.selected
+        },
+        method: 'POST',
+        success(res) {
+          console.log(res.data)
+        }
+      })
+    }
+    else {
+      console.log("您未选择")
+    }
     wx.showToast({
       title: '存入数据库成功！',
       icon: 'succes',

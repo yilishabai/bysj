@@ -65,7 +65,7 @@ Page({
     //认识/不认识按钮处理
     if (e.currentTarget.dataset.know){
       console.log('你点了认识')
-      data.learned.push(this.data.word.id)
+      data.learned.push(this.data.word)
     } else {
       console.log('你点了不认识')
       data.words.push(this.data.word);
@@ -94,13 +94,13 @@ Page({
     wx.request({
       url: 'http://localhost:8080/words/learned', //仅为示例，并非真实的接口地址
       data: {
-        learnedId:data.learned,
-        userid: app.globalData.userInfo.openid
+        word: data.learned,
+        user: app.globalData.userInfo
       },
       // header:{
       //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
       // },
-      method: 'POST',
+      method: 'PUT',
       success(res) {
         console.log(res.data)
       }
@@ -131,13 +131,8 @@ Page({
       })//添加用户基本信息到本页面
     }
     if (options.selected > 0 && data.words.length <= 0) {//如果有选择词库且未获取      
-      console.log('获得的参数：' + options.selected)
-      var promise = dayNum => {
-          return new Promise((resovle,reject) => {
-            that.getWords(dayNum,resovle)//获取单词
-        })  
-      }    
-      promise(app.globalData.userDayNum).then(res =>{
+      console.log('获得的参数：' + options.selected)  
+      that.getWords().then(res =>{
         that.setData({
           word:data.words.shift(),
           lastnum:data.words.length+1,
@@ -278,24 +273,24 @@ Page({
     })
   },
   //获取单词
-  getWords: function(func){
+  getWords: function(){
     var that = this
-    wx.request({
-      url: "http://localhost:8080/words/getDayWords", //仅为示例，并非真实的接口地址
-      data: app.globalData.userInfo,
-      // header:{
-      //   "Content-Type": 'application/x-www-form-urlencoded;charset=utf-8'
-      // },
-      method: 'GET',
-      success(res) {
-        console.log(res.data);
-        data.words = res.data;
-        // that.setData({
-        //   words:res.data
-        // })
-        func();
-      }
-    })
+    var promise = new Promise((resolve,reject)=>{
+        wx.request({
+          url: "http://localhost:8080/words/getDayWords",
+          data: app.globalData.userInfo,
+          method: 'GET',
+          success(res) {
+            console.log(res.data);
+            data.words = res.data;
+            // that.setData({
+            //   words:res.data
+            // })
+            resolve();
+          }
+        })
+      })
+   return promise;
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
