@@ -1,5 +1,8 @@
 // pages/setting/setting.js
 const app = getApp()
+
+var interaction = require("../../utils/interaction.js");
+
 Page({
 
   /**
@@ -9,7 +12,9 @@ Page({
     dayNum: 0,
     dictionarys:2,
     learnedNum:215,
+    wordNum:210,
     changeDayNum:false,
+    signInDate: 10
   },
   inputHandle: function(e){
     console.log('你修改了每日词汇量')
@@ -35,15 +40,23 @@ Page({
    */
   onLoad: function (options) {
     console.log('你打开了用户设置')
-    console.log(app.globalData)
+
     this.setData({
-      dayNum: app.globalData.userInfo.dayNum
+      learnedNum: app.globalData.userInfo.learned,
+      dayNum: app.globalData.userInfo.dayNum,
+      wordNum: app.globalData.userInfo.wordNum,
+      dictionarys: app.globalData.userInfo.bookNum,
+    })
+    interaction.getSignInCount().then(res => {
+      this.setData({
+        signInDate: res
+      })
     })
     if(options.selected){
       console.log('传入的参数为：')
       console.log(options.selected)
       this.setData({
-        dictionarys: options.selected,
+        dictionarys: app.globalData.userInfo.bookNum,
       })
     }
   },
@@ -74,14 +87,7 @@ Page({
    */
   onUnload: function () {
     if(this.data.changeDaynum){
-      wx.request({
-        url: 'http://localhost:8080/user', //仅为示例，并非真实的接口地址
-        data: app.globalData.userInfo,
-        method: 'PUT',
-        success(res) {
-          console.log(res.data)
-        }
-      })
+      interaction.putUserDayNum();
     }
   },
 

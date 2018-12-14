@@ -15,6 +15,9 @@
       <view  bindtap='changetoSelect'>
         <text>已选词库(点击选择词库)</text>
         <view class='dic'>{{dictionarys}}</view>
+        <view class='clear'></view>
+        <text>已选单词量</text>
+        <view class='dic'>{{wordNum}}</view>
       </view>
     </view>
     <view class='clear'></view>
@@ -24,7 +27,10 @@
        <view class='dic'>{{learnedNum}}</view>
       <view class='clear'></view>
       <text>剩余单词量</text>
-      <view class='dic'>{{5000-learnedNum}}</view>
+      <view class='dic'>{{wordNum-learnedNum}}</view>
+      <view class='clear'></view>
+      <text>签到天数</text>
+      <view class='dic'>{{signInDate}}</view>
     </view>
   </view>
   <view class='footer calm-2'>

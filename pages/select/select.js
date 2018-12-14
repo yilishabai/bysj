@@ -3,6 +3,7 @@
 // 然后跳一个提示框1秒提示数据已写入
 const app = getApp()
 var data = require("../data/data.js");
+var interaction = require("../../utils/interaction.js");
 Page({
 
   /**
@@ -22,6 +23,14 @@ Page({
       this.setData({
         dictionaries: data.dictionaries,
         selected: data.dictionaries[id]
+      })
+      this.sendSelected().then(res => {
+        wx.showToast({
+          title: '存入数据库成功！',
+          icon: 'succes',
+          duration: 1000,
+          mask: true
+        })
       })
     } else {
       this.setData({
@@ -55,6 +64,15 @@ Page({
     wx.redirectTo({
       url: "../setting/setting?selected=" + selected
     })
+  },
+  sendSelected: function(){
+    var that = this
+    var data = {
+      user: app.globalData.userInfo,
+      book: that.data.selected
+    }
+    var p = interaction.sendSelected(data)
+    return p;
   },
   /**
    * 生命周期函数--监听页面加载
@@ -118,27 +136,11 @@ Page({
   onUnload: function () {
     var that = this
     if(this.data.selected.id){//如果选择
-      wx.request({
-        url: 'http://localhost:8080/words/selectedBooks',
-        data: {
-          user: app.globalData.userInfo,
-          book: that.data.selected
-        },
-        method: 'POST',
-        success(res) {
-          console.log(res.data)
-        }
-      })
+      app.globalData.userInfo.bookNum = selected;
     }
     else {
       console.log("您未选择")
     }
-    wx.showToast({
-      title: '存入数据库成功！',
-      icon: 'succes',
-      duration: 1000,
-      mask: true
-    }) 
   },
 
   /**
