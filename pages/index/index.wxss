@@ -1,21 +1,96 @@
-/**index.wxss**/
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* pages/index/index.wxss */
+.body{
+  height: 100%;
+  width: 100%;
 }
 
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.center{
+  text-align: center;
+    /* 垂直水平居中 */
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.userinfo-nickname {
-  color: #aaa;
+.header{
+  height: 15%;
+  width: 100%;
 }
 
-.usermotto {
-  margin-top: 200px;
+.container1{
+  height: 75%;
+  width: 100%;
+}
+
+.container1 .loginModel,.container1 .learningModel,.container1 .settingModel,.container1 .selectModel{
+  height: 100%;
+  width: 100%;
+}
+
+.container1 .top,.container1 .middle{
+  height: 42.5%;
+  width: 100%;
+}
+
+.container1 .bottom {
+  height: 15%;
+  width: 100%;
+}
+
+.bottom button{
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+/* 选词模式css */
+.selectModel .selectbody{
+  height: 100%;
+  padding: 20px;
+  overflow: hidden;
+    /* 边框  */
+  box-sizing: border-box;
+  border: 1px solid white;
+}
+.selectModel .checkbox{
+  display: block;
+  line-height: 2em;
+}
+
+/* 设置模式css */
+.settingModel .middle{
+  height: 100%;
+  width: 100%;
+  padding: 20px 0;
+      /* 边框  */
+  box-sizing: border-box;
+  border: 1px solid white;
+}
+.middle .setters{
+  margin: 10px 0;
+  padding: 0;
+  padding-left: 30px;
+  line-height: 2em;
+}
+.middle .title{
+  padding-left: 15px;
+  padding-right: 15px;
+        /* 边框  */
+   box-sizing: border-box;
+   border: 1px solid green;  
+}
+.section{
+  width: 5em;
+  float: right;
+          /* 边框  */
+  box-sizing: border-box;
+  border: 1px solid greenyellow;
+  border-radius: 0.5em;
+  background-color: palegoldenrod;
+  text-align: center;
+}
+.dic{
+  width: 5em;
+  text-align: center;
+  float: right;
 }

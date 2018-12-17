@@ -1,78 +1,186 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+//通用
+var data = require("../data/data.js");
+var USER = require("../../utils/user.js");
+var interaction = require("../../utils/interaction.js");
+//选择模式
+var selectModel = require("select.js");
+//设置模式
+var settingModel = require("setting.js");
+//学习模式
+var learningModel = require("learn.js");
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
+  //通用变量
+    //模式选择标志 1-4
+    NowModel: 1,
+    //顶上的
+    motto: '吃瓜背单词',
+    //中间的字    
+    contentText: "点击添加新的单词到你的词汇表",
+    //底部的
+    footer_left: '词库',
+    footer_right: '设置',
+    // 用户信息
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    user: null,
+  //学习模式相关
+    //按钮
+    btnleft: '认识',
+    btnright: '不认识',
+    //显示答案标志
+    clicked: false,
+    //剩余单词数
+    lastnum: 40,
+    //单词信息
+    word: {},
+  //选词模式相关
+    //词典
+    dictionaries:[],
+    selected: {},
+  //登录模式相关
+    //签到标志
+    signInFlg: false,
+    //是否选择词库
+    haslexicon: false,
+    //中间的提示
+    msg: "请把英文发音和中文意思说出口\n（点击屏幕显示答案）",
+  //设置模式相关
+    dayNum: 0,
+    dictionarys: 2,
+    learnedNum: 215,
+    wordNum: 210,
+    changeDayNum: false,
+    signInDate: 10
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+  //切换模式事件处理函数
+  bindViewTap: function(e) {
+    console.log(e);
+    var that = this;
+    var model = e.currentTarget.dataset.model
+    var id = e.currentTarget.id
+    switch (model){
+      case 1:
+        if (that.data.hasUserInfo){
+          if (id === 'leftfoot') {
+            that.modelChange(3)
+          } else {
+            that.modelChange(4)
+          }
+        } else {
+          wx.showLoading({
+            title: '请授权登录！',
+            duration: 1000,
+            mask: true
+          })
+        }
+      break;
+      case 2:
+        learningModel.saveLearned(that);
+        if (id === 'leftfoot') {
+          //剩余单词
+        } else {
+          that.modelChange(4)
+        }
+      break;
+      case 3:
+        if (id === 'leftfoot') {
+          that.modelChange(2)
+        } else {
+          that.modelChange(4)
+        }
+      break;
+      case 4:
+        settingModel.sendDayNum(that);
+        if (id === 'leftfoot') {
+          that.modelChange(1)
+        } else {
+          that.modelChange(3)
+        }
+      break;
+    }
   },
   onLoad: function () {
-    var content=this;
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
+    var that = this;
+    //第一次登陆显示授权按钮
+    if (!this.data.hasUserInfo && !app.globalData.userInfo.id)//未登录
+    {
+      console.log('新打开')
+      //获取用户所有信息
+      USER.getUserAllInfo(this).then(res => {
+        console.log(that.data.user)
+        that.modelChange(that.data.NowModel)
+        console.log(app.globalData.userInfo)
+        return interaction.postUserInfo();//发送
+      }).then(res => {
+        if (app.globalData.userInfo.bookNum > 0) {//如果有选书
+          that.modelChange(2);
         }
       })
     }
-
-    // wx.request({
-    //   url: 'http://localhost:8080/DatabaseAccess',
-    //   method: 'POST', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },// 设置请求的 header
-    //   success: function (res) {
-    //     console.log("wx.requestSuccess!");
-    //     for(var i=0;i<res.data.length;i++){
-    //       console.log("id:" + res.data[i].id);
-    //       console.log("name:" + res.data[i].name);
-    //       console.log("name:" + res.data[i].url);
-    //     }
-    //   },
-    //   fail: function () {
-    //     console.log("index.js wx.request CheckCallUser fail");
-    //   },
-    //   complete: function () {
-    //     // complete
-    //   }
-    // })
-
+  },
+  modelChange: function (model) {
+    var that = this;
+    switch(model){
+      case 1: 
+        var name = '欢迎，' + that.data.user.nickName
+        if (app.globalData.userInfo.bookNum > 0) {//如果有选书
+          that.modelChange(2);
+        } else {
+          that.setData({
+            NowModel: 1,
+            motto: name,
+            contentText: "点击添加新的单词到你的词汇表",
+            footer_left: '词库',
+            footer_right: '设置',
+          })
+        }
+      break;
+      case 2:
+        learningModel.changeModel(that);
+      break;
+      case 3:
+        selectModel.changeModel(that);
+      break;
+      case 4:
+        settingModel.changeModel(that);
+      break;
+    }
   },
   getUserInfo: function(e) {
-    console.log(e)
+    var that = this
+    //按钮获取登录信息
+    console.log("button get userInfo ok!")
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
-      userInfo: e.detail.userInfo,
+      user: e.detail.userInfo,
       hasUserInfo: true
     })
+    USER.getUserOpenid().then(res => {
+      interaction.postUserInfo();//发送
+    })
+  },
+  //选词模式相关
+  checkboxChange: function(e){
+    selectModel.checkboxChange(e,this);
+  },
+  //设置模式相关
+  inputHandle: function(e){
+    settingModel.inputHandle(e,this);
+  },
+  changetoSelect: function(){
+    settingModel.sendDayNum(this);
+    this.modelChange(3);
+  },
+  //学习模式相关
+  answerHandle: function(e){
+    learningModel.showAnswer(this);
+  },
+  btnHandle: function(e){
+    learningModel.btnHandle(e,this);
   }
+
 })

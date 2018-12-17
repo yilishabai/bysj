@@ -32,7 +32,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 3,
 			"list": [
 				{
 					"id": 0,
@@ -51,6 +51,11 @@
 					"name": "用户设置",
 					"pathName": "pages/setting/setting",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "index",
+					"pathName": "pages/index/index"
 				}
 			]
 		}

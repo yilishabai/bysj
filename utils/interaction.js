@@ -60,7 +60,7 @@ var postUserInfo = function () {
 }
 //更新用户信息
 var putUserDayNum = function() {
-  put('http://localhost:8080/user',app.globalData.userInfo)
+  return put('http://localhost:8080/user',app.globalData.userInfo)
 }
 
 //获取单词
@@ -106,7 +106,7 @@ var sendSelected = function(data){
 }
 
 var getDictionaries = function(){
-  return get('http://localhost:8080/words/getBooks', app.globalData.userInfo)
+  return myget('http://localhost:8080/words/getBooks', app.globalData.userInfo)
 }
 
 module.exports = {
@@ -114,6 +114,7 @@ module.exports = {
   putUserDayNum: putUserDayNum,
   getWords: getWords,
   getSignInCount: getSignInCount,
+  getDictionaries: getDictionaries,
   sendLearnedWords: sendLearnedWords,
   sendSelected: sendSelected,
 }

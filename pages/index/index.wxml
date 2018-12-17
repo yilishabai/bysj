@@ -1,13 +1,83 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<!--pages/index/index.wxml-->
+<!-- model=1 登录模式 -->
+<!-- model=2 学习模式 -->
+<!-- model=3 选词库模式 -->
+<!-- model=4 设置模式 -->
+<view class='body'>
+  <view class='header center calm-1'>
+    <text>{{motto}}</text>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class='container1 calm-3'>
+    <!-- model=1 登录模式 -->
+    <view wx:if="{{NowModel == 1}}" class='loginModel center'>
+      <view wx:if="{{!hasUserInfo && canIUse}}" class='message calm-3'>
+        <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
+      </view>
+      <view class='loginModel center' wx:else bindtap='bindViewTap' id = 'leftfoot' data-model='{{NowModel}}'>
+        <text>{{contentText}}</text>      
+      </view>
+    </view>
+    <!-- model=2 学习模式 -->
+    <view wx:elif='{{NowModel == 2}}' class='learningModel'>
+      <view wx:if='{{clicked}}' class='learningModel'>
+        <view class='top center'>{{word.meaning}}</view>
+        <view class='middle center'>{{word.eg}}</view>
+        <view class='bottom'>
+          <button class='center' bindtap='btnHandle' data-know='{{true}}'>{{btnleft}}</button>
+          <button class='center' bindtap='btnHandle' data-know='{{false}}'>{{btnright}}</button>
+        </view>
+      </view>
+      <view wx:else bindtap='answerHandle' class='learningModel center'>
+        <text>{{contentText}}</text>      
+      </view>
+    </view>
+    <!-- model=3 选词库模式 -->
+    <view wx:elif='{{NowModel == 3}}' class='selectModel'>
+      <scroll-view scroll-y class='selectbody calm-3'>
+        <checkbox-group bindchange="checkboxChange" data-index="{{index}}" data-checks="{{item.selected}}" wx:for="{{dictionaries}}" wx:key="{{index}}">
+          <label class="checkbox">
+            <checkbox  data-index="{{index}}" value="{{item.name}}" checked="{{item.selected}}" disabled="{{item.selected}}"/>{{item.name}}({{item.size}})
+          </label>
+        </checkbox-group>
+      </scroll-view>
+    </view>
+    <!-- model=4 设置模式 -->
+    <view wx:elif='{{NowModel == 4}}' class='settingModel'>
+      <view class='middle calm-3'>
+        <text class='title calm-3-1'>学习设置：</text>
+        <view class='setters'>
+          <text>每日学习量</text>
+          <view class="section">
+            <input maxlength="5" type="number" bindinput='inputHandle' placeholder="{{dayNum}}" />
+          </view>
+          <view class='clear'></view>
+          <view  bindtap='changetoSelect'>
+            <text>已选词库(点击选择词库)</text>
+            <view class='dic'>{{dictionarys}}</view>
+            <view class='clear'></view>
+            <text>已选单词量</text>
+            <view class='dic'>{{wordNum}}</view>
+          </view>
+        </view>
+        <view class='clear'></view>
+        <text class='title calm-3-1'>学习情况：</text>
+        <view class='setters'>
+          <text>已学单词量</text>
+          <view class='dic'>{{learnedNum}}</view>
+          <view class='clear'></view>
+          <text>剩余单词量</text>
+          <view class='dic'>{{wordNum-learnedNum}}</view>
+          <view class='clear'></view>
+          <text>签到天数</text>
+          <view class='dic'>{{signInDate}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='footer calm-2'>
+    <view class='footer-left' bindtap='bindViewTap' id = 'leftfoot' data-model='{{NowModel}}'>{{footer_left}}
+    </view>
+    <view class='footer-right' bindtap='bindViewTap' id = 'rightfoot' data-model='{{NowModel}}'>{{footer_right}}
+    </view>
   </view>
 </view>
