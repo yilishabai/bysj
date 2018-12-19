@@ -61,19 +61,17 @@ var getUserOpenid = function () {
       var appId = 'wxee05247bc3763d94';
       var secret = 'edc926f5bf46b7dec470ed3d787061c0';
       wx.request({
-        url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appId + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code',
+        url: 'https://flb.hongdeyan.com/user/Login?code=' + code,
         data: {},
-        header: {
-          'content-type': 'json'
-        },
         success: function (res) {
           var openid = res.data.openid //返回openid
           app.globalData.userInfo.openid = openid
           console.log('get openid ok!openid为' + openid);
-          // console.log(content.data.user)
+          console.log(res)
           resovle();
         }
       })
+      
     })
   }
   var p = promise().then(res => {

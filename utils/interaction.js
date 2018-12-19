@@ -44,7 +44,7 @@ var myget = function(url,datas){
 //发送用户信息
 var postUserInfo = function () {
   console.log('send userInfo')
-  var p = post('http://localhost:8080/user',app.globalData.userInfo).then(res => {
+  var p = post('https://flb.hongdeyan.com/user',app.globalData.userInfo).then(res => {
     return new Promise((resolve,reject) => {
       console.log(res)
       app.globalData.userInfo.id = res.id;
@@ -60,13 +60,13 @@ var postUserInfo = function () {
 }
 //更新用户信息
 var putUserDayNum = function() {
-  return put('http://localhost:8080/user',app.globalData.userInfo)
+  return put('https://flb.hongdeyan.com/user',app.globalData.userInfo)
 }
 
 //获取单词
 var getWords = function() {
   console.log("获取单词...")
-  var promise = myget('http://localhost:8080/words/getDayWords',app.globalData.userInfo).then(res => {
+  var promise = myget('https://flb.hongdeyan.com/words/getDayWords',app.globalData.userInfo).then(res => {
       return new Promise((resolve, reject) => {
         console.log(res);
         if (res != "false")
@@ -86,7 +86,7 @@ var sendLearnedWords = function() {
     word: data.learned,
     user: app.globalData.userInfo
   }
-  put('http://localhost:8080/words/learned',mydata).then(res => {
+  put('https://flb.hongdeyan.com/words/learned',mydata).then(res => {
       console.log(res)
       wx.showToast({
         title: '今日签到成功！',
@@ -98,15 +98,15 @@ var sendLearnedWords = function() {
 }
 
 var getSignInCount = function(){
-  return post('http://localhost:8080/user/SignInCount',app.globalData.userInfo)
+  return post('https://flb.hongdeyan.com/user/SignInCount',app.globalData.userInfo)
 }
 
 var sendSelected = function(data){
-  return post('http://localhost:8080/words/selectedBooks',data)
+  return post('https://flb.hongdeyan.com/words/selectedBooks',data)
 }
 
 var getDictionaries = function(){
-  return myget('http://localhost:8080/words/getBooks', app.globalData.userInfo)
+  return myget('https://flb.hongdeyan.com/words/getBooks', app.globalData.userInfo)
 }
 
 module.exports = {
