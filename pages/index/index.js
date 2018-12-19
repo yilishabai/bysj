@@ -127,7 +127,7 @@ Page({
     switch(model){
       case 1: 
         var name = '欢迎，' + that.data.user.nickName
-        if (app.globalData.userInfo.bookNum > 0) {//如果有选书
+        if (app.globalData.userInfo.bookNum > 0 || that.data.selected.size > 0) {//如果有选书
           that.modelChange(2);
         } else {
           that.setData({

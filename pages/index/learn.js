@@ -13,9 +13,9 @@ var changeModel = function (content) {
     footer_left: '剩余单词 ' + content.data.lastnum,
     footer_right: '设置',
   })
-  if (app.globalData.userInfo.bookNum > 0) {//如果有选书
+  if (app.globalData.userInfo.bookNum > 0 || content.data.selected.size > 0) {//如果有选书
     new Promise((resolve, reject) => {
-      if (data.words.length > 0 || content.data.signInFlg) { //如果已获取单词或者已签到
+      if (data.words.length > 0 || data.signInFlg) { //如果已获取单词或者已签到
           resolve();
       }
       else 
@@ -56,7 +56,7 @@ var changeModel = function (content) {
 }
 
 var showAnswer = function(content){
-  if(!content.data.signInFlg)
+  if(!data.signInFlg)
   {
     content.setData({
      clicked: !content.data.clicked,
