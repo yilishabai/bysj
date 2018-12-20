@@ -9,8 +9,15 @@ var changeModel = function (content) {
   content.setData({
     NowModel: 2,
     motto: content.data.word.name + '\n' + content.data.word.ipa,
-    contentText: "请把英文发音和中文意思说出口\n（点击屏幕显示答案）",
+    contentText: {
+      ct1: "请把英文发音和中文解释说出口",
+      ct2: "点击屏幕显示答案"
+    },
     footer_left: '剩余单词 ' + content.data.lastnum,
+    iconName: {
+      r: 'shezhi',
+      l: 'fuxi',
+    },
     footer_right: '设置',
   })
   if (app.globalData.userInfo.bookNum > 0 || content.data.selected.size > 0) {//如果有选书

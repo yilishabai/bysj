@@ -9,6 +9,10 @@ var changeModel = function(content){
     NowModel: 4,
     motto: content.data.user.nickName,
     footer_left: '背单词',
+    iconName: {
+      r: 'xuanci',
+      l: 'fuxi',
+    },
     footer_right: '词库',
   })
   var wordnum = 0;

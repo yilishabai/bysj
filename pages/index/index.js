@@ -22,6 +22,7 @@ Page({
     contentText: "点击添加新的单词到你的词汇表",
     //底部的
     footer_left: '词库',
+    iconName: {},
     footer_right: '设置',
     // 用户信息
     hasUserInfo: false,
@@ -135,6 +136,10 @@ Page({
             motto: name,
             contentText: "点击添加新的单词到你的词汇表",
             footer_left: '词库',
+            iconName: {
+              r: 'shezhi',
+              l: 'xuanci',
+            },
             footer_right: '设置',
           })
         }

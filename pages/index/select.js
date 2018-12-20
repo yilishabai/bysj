@@ -9,6 +9,10 @@ var changeModel = function(content){
     NowModel: 3,
     motto: '选择词库',
     footer_left: '背单词',
+    iconName: {
+      r: 'shezhi',
+      l: 'fuxi',
+    },
     footer_right: '设置',
   })
   if (data.dictionaries.length == 0) {

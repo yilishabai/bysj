@@ -12,85 +12,235 @@
   align-items:center;
 }
 
-.header{
-  height: 15%;
+::-webkit-scrollbar{
+width: 0;
+height: 0;
+color: transparent;
+}
+
+.header-1{
+  height: 12.5%;
   width: 100%;
 }
+.header-1 .hello{
+  font-size: 1.5em;
+  color: black;
+}
+.header-2{
+   height: 15%;
+   width: 100%; 
+}
+
+.header-2 .word{
+  color: black;
+}
+.header-2 .word .name{
+  font-size: 1.1em;
+  font-weight: bolder;
+  line-height: 2em;
+}
+.header-2 .word .ipa{
+  font-size: 0.8em;
+}
+
+.header-3{
+   height: 10%;
+   width: 100%; 
+}
+.header-3 .select{
+  height: 100%;
+  width: 100%;
+  background-color: #36b69d;
+  color: white;
+}
+
+.header-4{
+  height: 15.5%;
+  width: 100%;
+}
+.header-4 .set-head{
+  height: 100%;
+  width: 100%;
+  font-size: 0.8em;
+}
+.set-head .txt{
+  height: 50%;
+  width: 100%;
+  background-color: #f7f7f7;
+}
+.set-head .usname{
+  height: 50%;
+  color: white;
+  width: 100%;
+  background-color: #36b69d;
+}
+
 
 .container1{
   height: 75%;
   width: 100%;
 }
+.container2{
+  height: 72.5%;
+  width: 100%;
+}
+.container3{
+  height: 77.5%;
+  width: 100%;
+}
+.container4{
+  height: 72%;
+  width: 100%;
+}
 
-.container1 .loginModel,.container1 .learningModel,.container1 .settingModel,.container1 .selectModel{
+.container1 .loginModel,.container2 .learningModel,.container4 .settingModel,.container3 .selectModel{
   height: 100%;
   width: 100%;
 }
+.loginModel {
+  color: #555;
+  font-size: 1.1em;
+}
+.learningModel .msg .ct1{
+  color: #555;
+}
+.learningModel .msg .ct2{
+  color: #48af9a;
+}
+.learningModel .answer{
+  height: 100%;
+  width: 100%;
+}
+.answer .meaning{
+  height: 8%;
+  width: 100%;
+  text-indent: 1em;
+  font-size: 0.8em;
+  background: linear-gradient(#99c1c1,#9ad6d6);
+  border-top: 1px solid #c9fafe;
+    /* 水平居中 */
+  display:flex;
+  align-items:center;
+}
 
-.container1 .top,.container1 .middle{
-  height: 42.5%;
+.answer .middle{
+  height: 80%;
   width: 100%;
 }
 
-.container1 .bottom {
-  height: 15%;
+.egandhelp{
+  color: #555;
+}
+.egandhelp .eh-head{
+  height: 2em;
+  background-color: #f7f7f7;
+  text-indent: 1em;
+      /* 水平居中 */
+  display:flex;
+  align-items:center;
+}
+.egandhelp .eh-body{
+  margin: 1em;
+  line-height: 2em;
+}
+
+
+.answer .bottom {
+  height: 12%;
   width: 100%;
+    /* 水平居中 */
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .bottom button{
-  width: 50%;
-  height: 100%;
+  width: 40%;
+  height: 80%;
   float: left;
+}
+.bottom .btn-l{
+  background-color: #82c2aa;
+  color: white;
+}
+.bottom .btn-r{
+  background-color: #dd663e;
+  color: white;
 }
 
 /* 选词模式css */
-.selectModel .selectbody{
-  height: 100%;
-  padding: 20px;
-  overflow: hidden;
-    /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid white;
-}
-.selectModel .checkbox{
-  display: block;
-  line-height: 2em;
-}
+  .selectModel .selectbody{
+    height: 100%;
+    padding: 20px;
+    overflow: hidden;
+      /* 边框  */
+    box-sizing: border-box;
+    border: 1px solid white;
+  }
+  .selectModel .checkbox{
+    display: block;
+    line-height: 2em;
+  }
 
 /* 设置模式css */
-.settingModel .middle{
+.settingModel .set-scroll{
   height: 100%;
   width: 100%;
-  padding: 20px 0;
-      /* 边框  */
-  box-sizing: border-box;
-  border: 1px solid white;
 }
-.middle .setters{
-  margin: 10px 0;
-  padding: 0;
-  padding-left: 30px;
-  line-height: 2em;
+.set-box .s-head{
+  height: 3em;
+  font-size: 0.8em;
+  background-color: #f1f0f6;
+  color: #a1a1a3;
+  text-indent: 1em;
+  display:flex;
+  align-items:center;
+  border-bottom: 1px solid #cdcdcd;
 }
-.middle .title{
-  padding-left: 15px;
-  padding-right: 15px;
-        /* 边框  */
-   box-sizing: border-box;
-   border: 1px solid green;  
+.set-box .s-body{
+  height: 3.5em;
+  width: 100%;
+  border-bottom: 1px solid #cdcdcd;
 }
-.section{
+.s-body .b-left{
+  height: 100%;
+  float: left;
+  font-size: 1em;
+  text-indent: 1em;
+  display:flex;
+  align-items:center;
+}
+.s-body .b-right{
+  position: relative;
+  right: 1em;
+  top: 0.75em;
+}
+.b-right .section{
   width: 5em;
+  height: 2em;
   float: right;
           /* 边框  */
   box-sizing: border-box;
-  border: 1px solid greenyellow;
+  border: 1px solid #36b69d;
   border-radius: 0.5em;
-  background-color: palegoldenrod;
+  background-color: white;
   text-align: center;
+  display:flex;
+  align-items:center;
+  color: #36b69d;
 }
-.dic{
-  width: 5em;
-  text-align: center;
+.b-right .r-txt{
   float: right;
+  width: 5em;
+  height: 2em;
+  text-align: center;
+  border-radius: 0.5em;
+  background-color: #36b69d;
+  color: white;
 }
+
+
+/* header */
+  .header-bg{
+    background: linear-gradient(#3e88a1, #99c1c1);
+  }
