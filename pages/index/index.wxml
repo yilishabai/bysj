@@ -8,13 +8,12 @@
     <view wx:if="{{NowModel == 1}}" class="hello"><text>{{user.nickName}},你好</text></view>
     <view wx:if="{{NowModel == 2}}" class="word">
       <text class='name'>{{word.name}}\n</text>
-      <text class='ipa'>英 [{{word.ipa}}]</text>
+      <text class='ipa'>{{word.ipa}}</text>
     </view>
     <view wx:if="{{NowModel == 3}}" class="select center">
       <text>请选择词库\n（点击即选，不可取消）</text>
     </view>
     <view wx:if="{{NowModel == 4}}" class="set-head">
-      <view class='txt center'><text>我的设置</text></view>
       <view class='usname center'><text>{{user.nickName}}</text></view>
     </view>    
   </view>

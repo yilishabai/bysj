@@ -70,11 +70,10 @@ var getWords = function() {
       return new Promise((resolve, reject) => {
         console.log(res);
         if (res != "false")
-          data.words = res;
         // that.setData({
         //   words:res.data
         // })
-        resolve();
+        resolve(res);
       })
     })
   return promise;

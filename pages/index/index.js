@@ -22,7 +22,10 @@ Page({
     contentText: "点击添加新的单词到你的词汇表",
     //底部的
     footer_left: '词库',
-    iconName: {},
+    iconName: {
+      r: 'shezhi',
+      l: 'fuxi',
+    },
     footer_right: '设置',
     // 用户信息
     hasUserInfo: false,
