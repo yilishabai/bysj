@@ -1,4 +1,5 @@
 //优先级队列
+
 var items = [];
 var nowElement;
 // {1}
@@ -52,6 +53,7 @@ var print = function () {
 
 var create = function (words) {
   for (var word of words) {
+    word.count = 0;//出现次数0
     this.enqueue(word, 0);
   }
 }

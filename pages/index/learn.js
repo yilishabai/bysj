@@ -38,6 +38,7 @@ var changeModel = function (content) {
         console.log(queue.size())
         if(typeof(queue.nowElement)=='undefined'){
           queue.nowElement = queue.dequeue();
+          queue.nowElement.element.count ++ ;
         }
         content.setData({
           haslexicon: true,
@@ -85,20 +86,26 @@ var btnHandle = function(e,content) {
   //认识/不认识按钮处理
   if (e.currentTarget.dataset.know) {
     console.log('你点了认识')
-    queue.nowElement.priority+=2;  //减少出现次数
+    if(queue.nowElement.priority < 3)
+      queue.nowElement.priority=3;  //减少出现次数
+    else 
+      queue.nowElement.priority+=1;
   } else {
     console.log('你点了不认识')
-    queue.nowElement.priority+=1;  //增加出现次数
+    if(queue.nowElement.priority <=1)
+      queue.nowElement.priority=1;  //增加出现次数
   }
-  if (queue.nowElement.priority < 3) {//至少出现2次
-    queue.enqueue(queue.nowElement.element, queue.nowElement.priority)
+  if (queue.nowElement.priority < 5 && queue.nowElement.element.count < 8) {//如果优先级小于4且出现次数小于8
+    queue.enqueue(queue.nowElement.element, queue.nowElement.priority)//再入队
   } else {//出队
     data.learned.push(queue.nowElement.element);
   }  
   queue.print()
   queue.nowElement = queue.dequeue();
+
   var myshiftword;
   if (typeof (queue.nowElement) != "undefined"){
+    queue.nowElement.element.count++;
     myshiftword = queue.nowElement.element;
   }
   if (typeof (myshiftword) != "undefined") {//如果没有背完所有单词
@@ -125,7 +132,7 @@ var btnHandle = function(e,content) {
       }//提示
     })
     console.log(data.learned);
-    interaction.sendLearnedWords();
+    // interaction.sendLearnedWords();
     data.signInFlg = true;
   }
   // console.log(e)
