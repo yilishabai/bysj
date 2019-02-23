@@ -54,6 +54,7 @@ var print = function () {
 var create = function (words) {
   for (var word of words) {
     word.count = 0;//出现次数0
+    word.rightcount = 0;//正确次数0
     this.enqueue(word, 0);
   }
 }

@@ -44,7 +44,7 @@ var myget = function(url,datas){
 //发送用户信息
 var postUserInfo = function () {
   console.log('send userInfo')
-  var p = post('https://flb.hongdeyan.com/user',app.globalData.userInfo).then(res => {
+  var p = post('http://localhost:8080/user',app.globalData.userInfo).then(res => {
     return new Promise((resolve,reject) => {
       console.log(res)
       app.globalData.userInfo.id = res.id;
@@ -60,13 +60,16 @@ var postUserInfo = function () {
 }
 //更新用户信息
 var putUserDayNum = function() {
-  return put('https://flb.hongdeyan.com/user',app.globalData.userInfo)
+  return put('http://localhost:8080/user',app.globalData.userInfo)
+}
+var putUserWordModel = function () {
+  return put('http://localhost:8080/user/changeModel', app.globalData.userInfo)
 }
 
 //获取单词
 var getWords = function() {
   console.log("获取单词...")
-  var promise = myget('https://flb.hongdeyan.com/words/getDayWords',app.globalData.userInfo).then(res => {
+  var promise = myget('http://localhost:8080/words/getDayWords',app.globalData.userInfo).then(res => {
       return new Promise((resolve, reject) => {
         console.log(res);
         if (res != "false")
@@ -85,7 +88,7 @@ var sendLearnedWords = function() {
     word: data.learned,
     user: app.globalData.userInfo
   }
-  put('https://flb.hongdeyan.com/words/learned',mydata).then(res => {
+  put('http://localhost:8080/words/learned',mydata).then(res => {
       console.log(res)
       wx.showToast({
         title: '今日签到成功！',
@@ -97,23 +100,32 @@ var sendLearnedWords = function() {
 }
 
 var getSignInCount = function(){
-  return post('https://flb.hongdeyan.com/user/SignInCount',app.globalData.userInfo)
+  return post('http://localhost:8080/user/SignInCount',app.globalData.userInfo)
 }
 
 var sendSelected = function(data){
-  return post('https://flb.hongdeyan.com/words/selectedBooks',data)
+  return post('http://localhost:8080/words/selectedBooks',data)
 }
 
 var getDictionaries = function(){
-  return myget('https://flb.hongdeyan.com/words/getBooks', app.globalData.userInfo)
+  return myget('http://localhost:8080/words/getBooks', app.globalData.userInfo)
 }
 
+var getWordsBybook = function(bookid){
+  return myget('http://localhost:8080/words/getWordsBybook', {id: bookid})
+}
+var getUserWords = function(userid){
+  return myget('http://localhost:8080/words/getSelectWords', {id: userid})
+}
 module.exports = {
   postUserInfo: postUserInfo,
   putUserDayNum: putUserDayNum,
+  putUserWordModel: putUserWordModel,
   getWords: getWords,
+  getUserWords: getUserWords,
   getSignInCount: getSignInCount,
   getDictionaries: getDictionaries,
+  getWordsBybook: getWordsBybook,
   sendLearnedWords: sendLearnedWords,
   sendSelected: sendSelected,
 }

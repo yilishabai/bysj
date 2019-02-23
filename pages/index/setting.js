@@ -5,6 +5,10 @@ var data = require("../data/data.js");
 
 var changeModel = function(content){
   console.log('你打开了用户设置')
+  wx.setNavigationBarColor({
+    frontColor: '#000000',
+    backgroundColor: '#36b69d',
+  })
   content.setData({
     NowModel: 4,
     motto: content.data.user.nickName,
@@ -14,6 +18,7 @@ var changeModel = function(content){
       l: 'fuxi',
     },
     footer_right: '词库',
+    nowModel: app.globalData.userInfo.model? '随机模式' : '顺序模式',
   })
   var wordnum = 0;
   if(data.dictionaries.length > 0){
@@ -74,8 +79,21 @@ var selectedWords = function (){
   return count;
 }
 
+var sendChangeModel = function (content,nowmodel) {
+  app.globalData.userInfo.model = nowmodel;
+  interaction.putUserWordModel().then(res => {
+    wx.showToast({
+      title: '修改选词模式成功！',
+      icon: 'succes',
+      duration: 1000,
+      mask: true
+    })
+  })
+}
+
 module.exports = {
   changeModel: changeModel,
   inputHandle: inputHandle,
   sendDayNum: sendDayNum,
+  sendChangeModel: sendChangeModel,
 }

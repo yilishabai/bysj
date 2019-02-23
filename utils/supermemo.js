@@ -26,10 +26,10 @@ export default function (quality, lastSchedule, lastFactor) {
     curSchedule = 1
     newFac = 2.5
   } else {
-    // if (quality < 3) {
-    //   newFac = lastFactor
-    //   curSchedule = lastSchedule
-    // } else {
+    if (quality < 3) {
+      newFac = lastFactor
+      curSchedule = lastSchedule
+    } else {
       newFac = calcFactor(lastFactor, quality)
 
       if (newFac < 1.3) {
@@ -37,7 +37,7 @@ export default function (quality, lastSchedule, lastFactor) {
       }
 
       curSchedule = Math.round(lastSchedule * newFac)
-    // }
+    }
   }
 
   return {

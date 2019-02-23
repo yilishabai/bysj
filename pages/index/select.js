@@ -5,6 +5,10 @@ var interaction = require("../../utils/interaction.js");
 
 var changeModel = function(content){
   console.log('你点击了词库选择')
+  wx.setNavigationBarColor({
+    frontColor: '#000000',
+    backgroundColor: '#36b69d',
+  })
   content.setData({
     NowModel: 3,
     motto: '选择词库',

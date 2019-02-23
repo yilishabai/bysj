@@ -1,8 +1,9 @@
-.log-list {
-  display: flex;
-  flex-direction: column;
-  padding: 40rpx;
+.body{
+  height: 100%;
+  width: 100%;
 }
-.log-item {
-  margin: 10rpx;
+.viewbody{
+  height: 90%;
+  width: 90%;
+  padding: 1em;
 }

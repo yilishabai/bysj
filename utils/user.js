@@ -61,7 +61,7 @@ var getUserOpenid = function () {
       var appId = 'wxee05247bc3763d94';
       var secret = 'edc926f5bf46b7dec470ed3d787061c0';
       wx.request({
-        url: 'https://flb.hongdeyan.com/user/Login?code=' + code,
+        url: 'http://localhost:8080/user/Login?code=' + code,
         data: {},
         success: function (res) {
           var openid = res.data.openid //返回openid

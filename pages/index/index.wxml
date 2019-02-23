@@ -8,10 +8,14 @@
     <view wx:if="{{NowModel == 1}}" class="hello"><text>{{user.nickName}},你好</text></view>
     <view wx:if="{{NowModel == 2}}" class="word">
       <text class='name'>{{word.name}}\n</text>
-      <text class='ipa'>{{word.ipa}}</text>
+      <text class='ipa'>[{{word.ipa}}]</text>
     </view>
     <view wx:if="{{NowModel == 3}}" class="select center">
-      <text>请选择词库\n（点击即选，不可取消）</text>
+      <text wx:if="{{!showSearch}}">请选择词库</text>
+      <view class='searchbox' wx:else>
+        <text class="iconfont icon-search searchicon"></text>
+        <input type='text' bindinput='searchTo'></input>
+      </view>
     </view>
     <view wx:if="{{NowModel == 4}}" class="set-head">
       <view class='usname center'><text>{{user.nickName}}</text></view>
@@ -59,13 +63,18 @@
     </view>
     <!-- model=3 选词库模式 -->
     <view wx:elif='{{NowModel == 3}}' class='selectModel'>
-      <scroll-view scroll-y class='selectbody'>
-        <checkbox-group bindchange="checkboxChange" data-index="{{index}}" data-checks="{{item.selected}}" wx:for="{{dictionaries}}" wx:key="{{index}}">
-          <label class="checkbox">
-            <checkbox  data-index="{{index}}" value="{{item.name}}" checked="{{item.selected}}" disabled="{{item.selected}}"/>{{item.name}}({{item.size}})
-          </label>
+      <scroll-view scroll-y class='selectbody' bindscroll='scrollfindwords' bindscrolltoupper='scrollTotop' scroll-into-view ='{{toView}}'>
+        <checkbox-group bindchange="checkboxChange" class='bookNames' data-index="{{index}}" data-checks="{{item.selected}}" wx:for="{{dictionaries}}" wx:key="{{index}}">
+          <view>
+            <checkbox class='bookName' data-index="{{index}}" value="{{item.name}}" checked="{{item.selected}}" disabled="{{item.selected}}" />
+            <text bindtap='shwords' data-index='{{index}}'>{{item.name}}({{item.size}})</text>
+            <checkbox-group wx:if="{{item.cansee}}" wx:for="{{item.list}}" wx:for-index="wids" wx:for-item="word123" wx:key="{{wids}}" class='words'>              
+              <label id='{{word123}}' class='word'><checkbox checked="{{item.selected}}" disabled="{{item.selected}}" />{{word123}}</label>
+            </checkbox-group>  
+          </view>
         </checkbox-group>
       </scroll-view>
+      <button>确认选择</button>
     </view>
     <!-- model=4 设置模式 -->
     <view wx:elif='{{NowModel == 4}}' class='settingModel'>
@@ -92,9 +101,15 @@
               <view class='r-txt center'><text>{{wordNum}}</text></view>
             </view>
           </view>
+          <view class='s-body'>
+            <view class='b-left'><text>选词模式</text></view>
+            <view class='b-right'>
+              <view class='r-sw'><text>{{selectWordModel}}</text><switch bindchange='changeSelectModel'></switch></view>
+            </view>
+          </view>
         </view>  
         <view class='set-box'>
-          <view class='s-head'><text>学习情况</text></view>
+          <view class='s-head'><text>学习情况</text><text bindtap='gotoTable'>more ></text></view>
           <view class='s-body'>
             <view class='b-left'><text>已学单词量</text></view>
             <view class='b-right'>

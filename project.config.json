@@ -54,9 +54,16 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 3,
 					"name": "index",
-					"pathName": "pages/index/index"
+					"pathName": "pages/index/index",
+					"query": "NowModel=3"
+				},
+				{
+					"id": -1,
+					"name": "asdf",
+					"pathName": "pages/logs/logs",
+					"query": ""
 				}
 			]
 		}

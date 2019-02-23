@@ -7,6 +7,10 @@ var queue = require("../../utils/priorityQueue.js");
 
 var changeModel = function (content) {
   console.log('你进入了学习模式')
+  wx.setNavigationBarColor({
+    frontColor: '#000000',
+    backgroundColor: '#3e88a1',
+  })
   content.setData({
     NowModel: 2,
     motto: content.data.word.name + '\n 英 [' + content.data.word.ipa + ']',
@@ -86,6 +90,7 @@ var btnHandle = function(e,content) {
   //认识/不认识按钮处理
   if (e.currentTarget.dataset.know) {
     console.log('你点了认识')
+    queue.nowElement.element.rightcount ++;
     if(queue.nowElement.priority < 3)
       queue.nowElement.priority=3;  //减少出现次数
     else 
@@ -98,6 +103,11 @@ var btnHandle = function(e,content) {
   if (queue.nowElement.priority < 5 && queue.nowElement.element.count < 8) {//如果优先级小于4且出现次数小于8
     queue.enqueue(queue.nowElement.element, queue.nowElement.priority)//再入队
   } else {//出队
+    var quality = 8-queue.nowElement.element.count;
+    if(quality < 1)
+     quality = 1;
+    queue.nowElement.element.rightrate = queue.nowElement.element.rightcount / queue.nowElement.element.count
+    queue.nowElement.element.quality = quality;
     data.learned.push(queue.nowElement.element);
   }  
   queue.print()
@@ -132,7 +142,7 @@ var btnHandle = function(e,content) {
       }//提示
     })
     console.log(data.learned);
-    // interaction.sendLearnedWords();
+    interaction.sendLearnedWords();
     data.signInFlg = true;
   }
   // console.log(e)

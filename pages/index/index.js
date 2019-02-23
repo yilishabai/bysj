@@ -44,6 +44,8 @@ Page({
   //选词模式相关
     //词典
     dictionaries:[],
+    showSearch: false,
+    toView: '',
     selected: {},
   //登录模式相关
     //签到标志
@@ -53,6 +55,7 @@ Page({
     //中间的提示
     msg: "请把英文发音和中文意思说出口\n（点击屏幕显示答案）",
   //设置模式相关
+    selectWordModel: '顺序模式',
     dayNum: 0,
     dictionarys: 2,
     learnedNum: 215,
@@ -172,8 +175,53 @@ Page({
     })
   },
   //选词模式相关
+  scrollfindwords: function(e) {
+    if (e.detail.scrollTop!=0){
+      this.setData({
+        showSearch: true,
+      })
+    }
+  },
+  scrollTotop: function(e) {
+    console.log('to top')
+    for(var item of data.dictionaries){
+      item.cansee = false;
+    }
+    this.setData({
+      showSearch: false,
+      dictionaries: data.dictionaries
+    })
+  },
+  searchTo: function(e) {
+    var find = e.detail.value;
+    this.setData({
+      toView: find
+    })
+  },
   checkboxChange: function(e){
-    selectModel.checkboxChange(e,this);
+    // console.log(e)
+   selectModel.checkboxChange(e,this);
+  },
+  shwords: function(e){
+    var that = this;
+    var id = e.target.dataset.index;
+    var canshow = data.dictionaries[id].cansee ? false : true;
+    if (canshow && data.dictionaries[id].list==null){
+      interaction.getWordsBybook(id + 1).then(res => {
+        console.log(res)
+        data.dictionaries[id].list = res
+        data.dictionaries[id].cansee = canshow
+        this.setData({
+          dictionaries: data.dictionaries,
+        })
+      })
+    } else {
+      data.dictionaries[id].cansee = canshow
+      this.setData({
+        dictionaries: data.dictionaries
+      })
+    }   
+
   },
   //设置模式相关
   inputHandle: function(e){
@@ -182,6 +230,19 @@ Page({
   changetoSelect: function(){
     settingModel.sendDayNum(this);
     this.modelChange(3);
+  },
+  changeSelectModel: function(e){
+    var nowModel = this.data.selectWordModel==='顺序模式'?'随机模式':'顺序模式'
+    var flg = nowModel==='顺序模式'?false:true;
+    settingModel.sendChangeModel(this,flg);
+  },
+  gotoTable: function(e){
+    wx.navigateTo({
+      url: '../logs/logs',
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
   },
   //学习模式相关
   answerHandle: function(e){

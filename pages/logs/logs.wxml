@@ -1,6 +1,10 @@
 <!--logs.wxml-->
-<view class="container log-list">
-  <block wx:for="{{logs}}" wx:for-item="log">
-    <text class="log-item">{{index + 1}}. {{log}}</text>
-  </block>
+<view class='body'>
+  <scroll-view scroll-y class='viewbody'>
+    <view class='text'>你已经在吃瓜背单词累计学习了{{signInDate}}天，总计学习了{{learnedNum}}个单词，总共有{{wordNum}}个单词</view>
+    <view class='header'><text>id-单词-意思-熟练度</text></view>
+    <view class='list' wx:for="{{logs}}" wx:key="{{index}}">
+      <view>{{item[1]}}-{{item[6]}}-{{item[5]}}-{{item[3]}}</view>
+    </view>
+  </scroll-view>
 </view>
